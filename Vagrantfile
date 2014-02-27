@@ -6,15 +6,17 @@ Vagrant::Config.run do |config|
   config.vm.forward_port 3000, 3000
   config.vm.forward_port 8888, 8888
 
-	config.vm.synced_folder "shared", "/shared"
+	config.vm.share_folder "shared", "/home/vagrant/shared", "shared"
+	config.vm.share_folder "app", "/home/vagrant/app", "app"
 
   config.vm.provision :chef_solo do |chef|
+		chef.add_recipe "npm"
     chef.add_recipe "nodejs"
+    chef.add_recipe "nodejs_formidable"
     chef.add_recipe "mongodb-debs"
     chef.add_recipe "vim"
     chef.add_recipe "git"
 		chef.add_recipe "awesome_vim"
-		chef.add_recipe "awesome_vim_install"
     chef.json = {
       "nodejs" => {
         "version" => "0.10.26"
